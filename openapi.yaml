@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: RTV USA AGD API
+  version: '1.0'
+  description: Sklep ze sprzętem RTV i AGD
+servers:
+  - url: https://localhost:3000/
+tags:
+  - name: products
+    description: Product list and individual products
+paths:
+  /products:
+    get:
+      tags:
+        - products
+      summary: Get all products
+      description: Get all products as an array
+      operationId: getProducts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductArr'
+  /products/{productId}:
+    get:
+      tags:
+        - products
+      summary: Find product by ID
+      description: Returns a single product
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of the product to return
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          example: Żelazko
+        price:
+          type: number
+          example: 420.69
+        description:
+          type: string
+          example: Super hiper żelazko zdolne do wyprasowania nawet najbardziej wymagających ubrań
+        created_at:
+          type: string
+          example: 2023-03-31T09:14:00.180Z
+        updated_at:
+          type: string
+          example: 2023-03-31T09:32:31.734Z
+    ProductArr:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+      example:
+        - id: 1
+          name: Żelazko
+          price: 420.69
+          description: Super hiper żelazko zdolne do wyprasowania nawet najbardziej wymagających ubrań
+          created_at: 2023-03-31T09:14:00.180Z
+          updated_at: 2023-03-31T09:14:00.180Z
+        - id: 2
+          name: Szybki dysk SSD
+          price: 69.99
+          description: Kup już teraz szybki dysk SSD, który sprawi że twój komputer stanie się szybszy dzieki szybkiemu dyskowi SSD! Kup już teraz! Szybki dysk SSD!!
+          created_at: 2023-03-31T09:32:31.734Z
+          updated_at: 2023-03-31T09:32:31.734Z
