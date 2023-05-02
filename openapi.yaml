@@ -4,10 +4,12 @@ info:
   version: '1.0'
   description: Sklep ze sprzętem RTV i AGD
 servers:
-  - url: https://localhost:3000/
+  - url: http://localhost:3000/
 tags:
   - name: products
     description: Product list and individual products
+  - name: users
+    description: User authentication and information
 paths:
   /products:
     get:
@@ -46,6 +48,105 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Product not found
+  /users/sign_up:
+    post:
+      tags:
+        - users
+      summary: Create a new account
+      description: Creates a new account and returns user information
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpRequest'
+      responses:
+        200:
+          description: Successfully created a new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUserInfo'
+        422:
+          description: Something was wrong in the submitted data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginError'
+              example:
+                errors:
+                  - Password confirmation doesn't match Password
+                  - Email has already been taken
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Log into an account
+      description: Logs the user in and returns user information
+      operationId: logIn
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUserInfo'
+        401:
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginError'
+              example:
+                errors:
+                  - Invalid email or password
+  /users/logout:
+    delete:
+      tags:
+        - users
+      summary: Log out of an account
+      description: Logs out the user
+      operationId: LogOut
+      responses:
+        200:
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserNotLoggedIn'
+  /users/is_logged_in:
+    get:
+      tags:
+        - users
+      summary: Check if the user is logged in
+      description: Returns the login status and current user information if the user is logged in
+      operationId: IsLoggedIn
+      responses:
+        200:
+          description: Returns the login status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUserInfo'
+              examples:
+                Logged In:
+                  value:
+                    logged_in: true
+                    user:
+                      id: 4
+                      name: Kamil Mickiewicz
+                      email: kombinator7@example.com
+                Logged Out:
+                  value:
+                    logged_in: false
+
 components:
   schemas:
     Product:
@@ -86,3 +187,66 @@ components:
           description: Kup już teraz szybki dysk SSD, który sprawi że twój komputer stanie się szybszy dzieki szybkiemu dyskowi SSD! Kup już teraz! Szybki dysk SSD!!
           created_at: 2023-03-31T09:32:31.734Z
           updated_at: 2023-03-31T09:32:31.734Z
+    SignUpRequest:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Kamil Mickiewicz
+            email:
+              type: string
+              example: kombinator7@example.com
+            password:
+              type: string
+              example: P5&e,c*/KMQ>
+            password_confirmation:
+              type: string
+              example: P5&e,c*/KMQ>
+    LoginRequest:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            email:
+              type: string
+              example: kombinator7@example.com
+            password:
+              type: string
+              example: P5&e,c*/KMQ>
+    LoginError:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+            example:
+              - Invalid email or password
+    UserNotLoggedIn:
+      type: object
+      properties:
+        logged_in:
+          type: boolean
+          example: false
+    CurrentUserInfo:
+      type: object
+      properties:
+        logged_in:
+          type: boolean
+          example: true
+        user:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 4
+            name:
+              type: string
+              example: Kamil Mickiewicz
+            email:
+              type: string
+              example: kombinator7@example.com
