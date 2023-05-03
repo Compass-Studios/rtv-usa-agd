@@ -1,9 +1,21 @@
-import {ReactElement} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import Grid from '@mui/material/Grid';
 import {Box, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 
 export default function Products(): ReactElement {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://localhost:3000/products")
+      .then(response => {
+        return response.json()
+      })
+      .then(data => {
+        setData(data);
+      })
+    console.log(data);
+  }, [])
 
   return (
     <>
