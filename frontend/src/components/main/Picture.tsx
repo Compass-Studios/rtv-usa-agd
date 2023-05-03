@@ -24,7 +24,7 @@ export default function Picture(): ReactElement {
             transition: "transform 0.7s ease",
             position: "absolute",
             top: "20%",
-            left: "15%",
+            left: "16.5%",
             transform: `translateX(${swapPicture === 0 ? 0 : "-130%"})`,
             zIndex: swapPicture === 0 ? 2 : 1,
           }}
@@ -40,7 +40,7 @@ export default function Picture(): ReactElement {
             transition: "transform 0.7s ease",
             position: "absolute",
             top: "20%",
-            left: "15%",
+            left: "16.5%",
             transform: `translateX(${swapPicture === 1 ? 0 : "-130%"})`,
             zIndex: swapPicture === 1 ? 2 : 1,
           }}
@@ -57,7 +57,7 @@ export default function Picture(): ReactElement {
             transition: "transform 0.7s ease",
             position: "absolute",
             top: "20%",
-            left: "15%",
+            left: "16.5%",
             transform: `translateX(${swapPicture === 2 ? 0 : "-130%"})`,
             zIndex: swapPicture === 2 ? 2 : 1,
           }}
