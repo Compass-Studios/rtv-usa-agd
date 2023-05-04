@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   delete 'users/logout', to: 'sessions#destroy'
   get 'users/is_logged_in', to: 'sessions#is_logged_in'
 
+  resources :orders
+
   # Defines the root path route ("/")
   root "home#index"
 end
