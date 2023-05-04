@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    restart: unless-stopped
+#    environment:
+#      RAILS_ENV: production
+#      # When run in production, generate a secret with `rails secret | cut -c-32` inside the container
+#      RAILS_MASTER_KEY: paste_the_key_here
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./docker-data:/data
