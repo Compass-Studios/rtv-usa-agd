@@ -48,6 +48,13 @@ paths:
                 $ref: '#/components/schemas/Product'
         '404':
           description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorList'
+              example:
+                errors:
+                  - Product not found
   /users/sign_up:
     post:
       tags:
@@ -73,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginError'
+                $ref: '#/components/schemas/ErrorList'
               example:
                 errors:
                   - Password confirmation doesn't match Password
@@ -103,7 +110,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginError'
+                $ref: '#/components/schemas/ErrorList'
               example:
                 errors:
                   - Invalid email or password
@@ -217,7 +224,7 @@ components:
             password:
               type: string
               example: P5&e,c*/KMQ>
-    LoginError:
+    ErrorList:
       type: object
       properties:
         errors:
