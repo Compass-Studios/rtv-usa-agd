@@ -55,6 +55,9 @@ group :development do
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
+
+  # For seeding the database with example data
+  gem 'faker'
 end
 
 group :test do
