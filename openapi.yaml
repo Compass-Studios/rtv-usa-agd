@@ -286,13 +286,11 @@ components:
         - id: 1
           name: Żelazko
           price: 420.69
-          description: Super hiper żelazko zdolne do wyprasowania nawet najbardziej wymagających ubrań
           created_at: 2023-03-31T09:14:00.180Z
           updated_at: 2023-03-31T09:14:00.180Z
         - id: 2
           name: Szybki dysk SSD
           price: 69.99
-          description: Kup już teraz szybki dysk SSD, który sprawi że twój komputer stanie się szybszy dzieki szybkiemu dyskowi SSD! Kup już teraz! Szybki dysk SSD!!
           created_at: 2023-03-31T09:32:31.734Z
           updated_at: 2023-03-31T09:32:31.734Z
     SignUpRequest:
