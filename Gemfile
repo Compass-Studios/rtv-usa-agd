@@ -58,6 +58,9 @@ group :development do
 
   # For seeding the database with example data
   gem 'faker'
+
+  # For seeding the database with example product images from LoremFlickr
+  gem 'down'
 end
 
 group :test do
