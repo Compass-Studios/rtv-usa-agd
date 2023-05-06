@@ -14,3 +14,4 @@ services:
       - '3000:3000'
     volumes:
       - ./docker-data:/data
+      - ./docker-data/storage:/app/storage
