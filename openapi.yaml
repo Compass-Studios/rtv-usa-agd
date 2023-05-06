@@ -48,6 +48,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              example:
+                id: 10
+                name: Żelazko
+                price: 420.69
+                description: Super hiper żelazko zdolne do wyprasowania nawet najbardziej wymagających ubrań
+                created_at: 2023-03-31T09:14:00.180Z
+                updated_at: 2023-03-31T09:32:31.734Z
+                image_lg: "/rails/active_storage/representations/redirect/eyJfcmFpb69d897e03c4c3174add8f910/Zelasko.jpg"
         '404':
           description: Product not found
           content:
@@ -278,6 +286,12 @@ components:
         updated_at:
           type: string
           example: 2023-03-31T09:32:31.734Z
+        image_lg:
+          type: string
+          nullable: true
+        image_sm:
+          type: string
+          nullable: true
     ProductArr:
       type: array
       items:
@@ -288,11 +302,13 @@ components:
           price: 420.69
           created_at: 2023-03-31T09:14:00.180Z
           updated_at: 2023-03-31T09:14:00.180Z
+          image_sm: "/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnsibW9iX2lkIn19/Zelasko.jpg"
         - id: 2
           name: Szybki dysk SSD
           price: 69.99
           created_at: 2023-03-31T09:32:31.734Z
           updated_at: 2023-03-31T09:32:31.734Z
+          image_sm: "/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnee47689bcfcb1/Szybki%20dysk%20SSD.jpg"
     SignUpRequest:
       type: object
       properties:
