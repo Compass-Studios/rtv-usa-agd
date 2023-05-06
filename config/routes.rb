@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get 'products', to: 'products#index'
   get 'products/:id', to: 'products#show'
+  get 'featured_products', to: 'products#featured'
 
   post 'users/sign_up', to: 'users#create'
   post 'users/login', to: 'sessions#create'
