@@ -1,10 +1,31 @@
-import {ReactElement} from "react";
+import {ReactElement, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import {Box, List, ListItem, Typography} from "@mui/material";
+
+interface IProduct {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export default function Product(): ReactElement {
 
   const { id } = useParams();
+  const [data, setData] = useState<IProduct>(  { id: 0, name: "", price: 0, description: "", created_at: "", updated_at: "",});
+
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/products/${id}`)
+      .then(response => { return response.json() })
+      .then(data => setData(data))
+    if (data.id > 0) {
+      console.log(data)
+    }
+  }, []);
+  
 
   return (
     <>
@@ -27,10 +48,10 @@ export default function Product(): ReactElement {
                 }}
                 variant="h4"
               >
-                Philips Perfect Care seria 9000
+                {data.name}
               </Typography>
               <Typography variant="h5" color="lightgrey">
-                3199 zł
+                {data.price} zł
               </Typography>
             </Box>
             <Box sx={{ width: "100%", display: "flex", flexDirection: "column", gap: 4}}>
@@ -73,17 +94,10 @@ export default function Product(): ReactElement {
       <Box sx={{ height: "50vh", width: "100%", display: "flex", justifyContent: "center" }}>
         <Box sx={{ background: "#1C1C1C", width: "68%", height: "fit-content", borderRadius: "19px", padding: 5 }}>
           <Typography variant="h4" textAlign="center">
-            Specyfikacja techniczna
+            Opis
           </Typography>
           <Typography variant="h5" sx={{ width: "fit-content", fontSize: "20px", fontWeight: 300 }}>
-            Procesor: Cortex-M55 <br />
-            Karta graficzna: Brak <br />
-            RAM: 256 MB <br />
-            Pamięć: 2 GB <br />
-            Silnik telemetrii: wersja 5.2.0 <br />
-            Mikrofony: stereofoniczne mikrofony kulkowo-bulbulacyjne z mechanicznymi przełącznikami membranowymi z każdej strony urządzenia <br />
-            Głośniki: brak <br />
-            Port słuchawkowy: brak <br />
+            {data.description}
           </Typography>
         </Box>
       </Box>
