@@ -8,24 +8,47 @@
 require 'faker'
 require 'down'
 
+product_img_url = Faker::LoremFlickr.image(
+  size: '500x500',
+  search_terms: %w(computer white background)
+)
+featured_product_img_url = Faker::LoremFlickr.image(
+  size: '1300x500',
+  search_terms: %w(washing machine)
+)
+
+print 'Creating example products'
+
 rand(70..100).times do
   product = Product.create!(
-    name: Faker::Commerce.product_name,
-    price: Faker::Commerce.price,
-    description: Faker::Lorem.paragraph(random_sentences_to_add: 20),
-  )
-
-  image_url = Faker::LoremFlickr.image(
-    size: '500x500',
-    search_terms: %w(computer white background)
+  name: Faker::Commerce.product_name,
+  price: Faker::Commerce.price,
+  description: Faker::Lorem.paragraph(random_sentences_to_add: 20),
   )
 
   product.image.attach(
-    io: Down.download(image_url),
+    io: Down.download(product_img_url),
     filename: product.name + '.jpg'
   )
 
   print '.'
 end
 
-puts "Database populated with #{Product.count} Products"
+puts "\nDatabase populated with #{Product.count} Products"
+print 'Adding example featured products'
+
+rand(3..5).times do
+  random_product = Product.find_by(id: rand(Product.count))
+
+  featured_product = FeaturedProduct.create!(
+    product: random_product
+  )
+  featured_product.image.attach(
+    io: Down.download(featured_product_img_url),
+    filename: random_product.name + '.jpg'
+  )
+
+  print '.'
+end
+
+puts "\nDatabase populated with #{FeaturedProduct.count} featured products"
