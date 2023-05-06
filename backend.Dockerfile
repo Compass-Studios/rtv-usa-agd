@@ -1,7 +1,7 @@
 FROM ruby:3.2.2-slim
 
 RUN apt update \
-    && apt install -y make gcc \
+    && apt install -y make gcc libvips-tools --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

@@ -2,7 +2,7 @@
 Rails + React
 
 ## Development
-0. Install [Ruby 3.2.1](https://www.ruby-lang.org/en/documentation/installation/) and Node.js
+0. Install [Ruby 3.2.2](https://www.ruby-lang.org/en/documentation/installation/), Node.js and a `vips` package (or `vips-tools`, or `libvips` depending on your Linux distribution. I have no idea about Windows)
 1. Clone the repository
 2. Run the following snippet from the repository root to install dependencies and run database migrations, and populate DB with example data
 ```sh
