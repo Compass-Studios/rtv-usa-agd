@@ -13,7 +13,6 @@ export default function Picture(): ReactElement {
 
   const click = (): void => {
     setSwapPicture((swapPicture + 1) % pictures.length);
-    console.log(swapPicture);
   }
 
   return (
