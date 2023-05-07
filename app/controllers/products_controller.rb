@@ -19,4 +19,12 @@ class ProductsController < ApplicationController
       }, status: :not_found
     end
   end
+
+  def featured
+    @featured_products = FeaturedProduct.all
+    render json: @featured_products.to_json(
+      only: [:product_id],
+      methods: :image_url,
+    )
+  end
 end

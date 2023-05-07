@@ -65,6 +65,20 @@ paths:
               example:
                 errors:
                   - Product not found
+  /featured_products:
+    get:
+      tags:
+        - products
+      summary: List of featured products
+      description: Returns a product_id and image_url
+      operationId: getFeaturedProducts
+      responses:
+        200:
+          description: List of featured products
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeaturedProductArr'
   /users/sign_up:
     post:
       tags:
@@ -309,6 +323,20 @@ components:
           created_at: 2023-03-31T09:32:31.734Z
           updated_at: 2023-03-31T09:32:31.734Z
           image_sm: "/rails/active_storage/representations/redirect/eyJfcmFpbHMiOnee47689bcfcb1/Szybki%20dysk%20SSD.jpg"
+    FeaturedProductArr:
+      type: array
+      items:
+        type: object
+        properties:
+          product_id:
+            type: number
+          image_url:
+            type: string
+      example:
+        - product_id: 21
+          image_url: "/rails/active_storage/blobs/redirect/eyJfcmFpbHMiOns1de476355708/Pralka.jpg"
+        - product_id: 42
+          image_url: "/rails/active_storage/blobs/redirect/eyJfcz09ImFpb5aaf0813916e1e/Suszarka.jpg"
     SignUpRequest:
       type: object
       properties:
