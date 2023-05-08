@@ -1,6 +1,6 @@
 import {ReactElement, useEffect, useState} from "react";
 import Grid from '@mui/material/Grid';
-import {Box, CircularProgress, Typography} from "@mui/material";
+import {CircularProgress, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 
 interface IElement {
@@ -48,7 +48,7 @@ export default function Products(): ReactElement {
           products?.map((element: IElement) => {
             return (
               <Product
-                key={element.id}
+                key={element.id + 20}
                 id={element.id}
                 created_at={element.created_at}
                 name={element.name} price={element.price}
