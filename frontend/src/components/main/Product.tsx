@@ -9,12 +9,13 @@ interface IProduct {
   description: string;
   created_at: string;
   updated_at: string;
+  image_lg: string;
 }
 
 export default function Product(): ReactElement {
 
   const { id } = useParams();
-  const [data, setData] = useState<IProduct>(  { id: 0, name: "", price: 0, description: "", created_at: "", updated_at: "",});
+  const [data, setData] = useState<IProduct>(  { id: 0, name: "", price: 0, description: "", created_at: "", updated_at: "", image_lg: ""});
 
 
   useEffect(() => {
@@ -34,8 +35,9 @@ export default function Product(): ReactElement {
           <img
             width="581px"
             height="554px"
-            src="https://media.discordapp.net/attachments/916382989905186819/1103338067596673106/image.png?width=704&height=671"
+            src={`http://localhost:3000/${data.image_lg}`}
             alt="produkt"
+            style={{ borderRadius: "19px" }}
           />
           <Box sx={{ width: "37%", height: "90%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <Box>
