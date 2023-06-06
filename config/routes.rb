@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  namespace :admin do
+      resources :users
+      resources :products
+      resources :orders
+      resources :featured_products
+
+      root to: "users#index"
+  end
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get 'products', to: 'products#index'
   get 'products/:id', to: 'products#show'
