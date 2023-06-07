@@ -32,4 +32,8 @@ a {
         width: 67%;
         height: calc(100% - 40%);
     }
+	.product-image {
+		width: 60%;
+		height: 100%;
+	}
 }

@@ -26,15 +26,27 @@ export default function Product(): ReactElement {
       console.log(data)
     }
   }, []);
-  
+
 
   return (
     <>
       <Box sx={{ width: "100%", height: "70vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <Box sx={{ width: "65%", display: "flex", justifyContent: "space-between", height: "80%", alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "65%",
+            display: "flex",
+            justifyContent: "space-between",
+            height: "80%",
+            alignItems: "center",
+            '@media screen and (max-width: 1600px)': {
+              height: "70%"
+            }
+          }}
+        >
           <img
             width="581px"
             height="554px"
+            className="product-image"
             src={`http://localhost:3000/${data.image_lg}`}
             alt="produkt"
             style={{ borderRadius: "19px" }}
