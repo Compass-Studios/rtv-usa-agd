@@ -5,10 +5,31 @@
     color: white;
 }
 
+.css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper {
+    background: #2c2c2c!important;
+}
+
 body {
     background: black;
+    scrollbar-width: none;
 }
+
+
+body::-webkit-scrollbar {
+  width: 0;
+  background-color: transparent;
+}
+
 
 a {
     text-decoration: none;
+}
+
+@media screen and (max-width: 1600px) {
+    .zdjecie {
+        top: 50%;
+        left: 50%;
+        width: 67%;
+        height: calc(100% - 40%);
+    }
 }

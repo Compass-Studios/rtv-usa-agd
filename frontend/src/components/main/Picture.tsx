@@ -14,9 +14,6 @@ export default function Picture(): ReactElement {
     fetch("http://localhost:3000/featured_products")
       .then(response => { return response.json() })
       .then(data => { setPictures(data) })
-    if (pictures.length > 1 ) {
-      console.log(pictures)
-    }
   }, []);
   
 
@@ -33,6 +30,7 @@ export default function Picture(): ReactElement {
               <img
                 src={`http://localhost:3000/${picture.image_url}`}
                 alt="zdjęcie2"
+                className="zdjecie"
                 width={1247}
                 height={432}
                 style={{
