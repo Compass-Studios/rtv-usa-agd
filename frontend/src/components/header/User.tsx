@@ -51,6 +51,7 @@ export default function User(): ReactElement {
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
     const [data, setData] = useState<UserResponse | null>();
+    const [triggerEffect, setTriggerEffect] = useState(false);
 
     const isRegisterData = (data: any): data is IRegisterData => {
     return (
@@ -90,7 +91,7 @@ export default function User(): ReactElement {
       );
       console.log(response.data);
       localStorage.setItem('data', JSON.stringify(response.data));
-      setData(response.data);
+      setTriggerEffect(prevState => !prevState);
     } catch (error) {
       console.error(error);
     }
@@ -100,7 +101,7 @@ export default function User(): ReactElement {
     try {
       const response = await axios.delete('http://localhost:3000/users/logout');
       localStorage.setItem("data", JSON.stringify({ logged_in: false, user: null }))
-      setData({ logged_in: false, user: null})
+      setTriggerEffect(prevState => !prevState);
     } catch(error) {
       console.error(error);
     }
@@ -118,7 +119,7 @@ export default function User(): ReactElement {
     let data = localStorage.getItem('data');
     let savedData: UserResponse = data ? JSON.parse(data) : null;
     setData(savedData);
-  }, [data]);
+  }, [triggerEffect]);
 
   return (
     <>
@@ -173,29 +174,37 @@ export default function User(): ReactElement {
 }
 
 function DialogElement(props: IDialog): ReactElement {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+
   const handleRegister = () => {
     const formData: IRegisterData = {
       user: {
-        name: (document.getElementById('name') as HTMLInputElement).value,
-        email: (document.getElementById('email') as HTMLInputElement).value,
-        password: (document.getElementById('password') as HTMLInputElement).value,
-        password_confirmation: (document.getElementById('password_confirmation') as HTMLInputElement).value
+        name,
+        email,
+        password,
+        password_confirmation: passwordConfirmation
       }
-    }
+    };
+
     props.handleSubmit(formData);
-    props.setOpen(false)
-  }
+    props.setOpen(false);
+  };
 
   const handleLogin = () => {
     const formData: ILoginData = {
       user: {
-        email: (document.getElementById('email') as HTMLInputElement).value,
-        password: (document.getElementById('password') as HTMLInputElement).value
+        email,
+        password
       }
-    }
+    };
+
     props.handleSubmit(formData);
     props.setOpen(false);
-  }
+  };
+
   return (
     <Dialog open={props.open} onClose={() => props.setOpen(!props.open)}>
       <Box sx={{display: "flex", padding: 2, background: "#2c2c2c"}}>
@@ -212,7 +221,7 @@ function DialogElement(props: IDialog): ReactElement {
           <CloseIcon/>
         </IconButton>
       </Box>
-      <form onSubmit={props.isRegister ? () => handleRegister() : () => handleLogin()}>
+      <form onSubmit={props.isRegister ? handleRegister : handleLogin}>
         <FormControl
           sx={{
             display: "flex",
@@ -224,98 +233,44 @@ function DialogElement(props: IDialog): ReactElement {
             background: "#2c2c2c"
           }}
         >
-          {
-            props.isRegister &&
+          {props.isRegister && (
             <TextField
-                id="name"
-                placeholder="username"
-                variant="outlined"
-                sx={{
-                  '& .MuiInputBase-input': {
-                    color: 'white',
-                    '&::placeholder': {
-                      color: 'white' // change placeholder color
-                    },
-                    '&:before': {
-                      borderBottomColor: 'white' // change border color when not focused
-                    },
-                    '&:hover:not(.Mui-disabled):before': {
-                      borderBottomColor: 'white' // change border color on hover
-                    },
-                    '&.Mui-focused:before': {
-                      borderBottomColor: 'white' // change border color when focused
-                    }
-                  }
-                }}/>
-          }
+              id="name"
+              placeholder="username"
+              variant="outlined"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              // Rest of the props
+            />
+          )}
           <TextField
             id="email"
             placeholder="email"
             variant="outlined"
-            sx={{
-              '& .MuiInputBase-input': {
-                color: 'white',
-                '&::placeholder': {
-                  color: 'white' // change placeholder color
-                },
-                '&:before': {
-                  borderBottomColor: 'white' // change border color when not focused
-                },
-                '&:hover:not(.Mui-disabled):before': {
-                  borderBottomColor: 'white' // change border color on hover
-                },
-                '&.Mui-focused:before': {
-                  borderBottomColor: 'white' // change border color when focused
-                }
-              }
-            }}/>
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            // Rest of the props
+          />
           <TextField
             id="password"
             placeholder="hasło"
             type="password"
             variant="outlined"
-            sx={{
-              '& .MuiInputBase-input': {
-                color: 'white',
-                '&::placeholder': {
-                  color: 'white' // change placeholder color
-                },
-                '&:before': {
-                  borderBottomColor: 'white' // change border color when not focused
-                },
-                '&:hover:not(.Mui-disabled):before': {
-                  borderBottomColor: 'white' // change border color on hover
-                },
-                '&.Mui-focused:before': {
-                  borderBottomColor: 'white' // change border color when focused
-                }
-              }
-            }}/>
-          {
-            props.isRegister &&
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            // Rest of the props
+          />
+          {props.isRegister && (
             <TextField
-                id="password_confirmation"
-            placeholder="Powtórz hasło"
-            type="password"
-            variant="outlined"
-            sx={{
-              '& .MuiInputBase-input': {
-                color: 'white',
-                '&::placeholder': {
-                  color: 'white' // change placeholder color
-                },
-                '&:before': {
-                  borderBottomColor: 'white' // change border color when not focused
-                },
-                '&:hover:not(.Mui-disabled):before': {
-                  borderBottomColor: 'white' // change border color on hover
-                },
-                '&.Mui-focused:before': {
-                  borderBottomColor: 'white' // change border color when focused
-                }
-              }
-            }}/>
-          }
+              id="password_confirmation"
+              placeholder="Powtórz hasło"
+              type="password"
+              variant="outlined"
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              // Rest of the props
+            />
+          )}
           <Button sx={{width: "fit-content", alignSelf: "center"}} type="submit" variant="contained">
             {
               props.isRegister ? "Zarejestruj się" : "Zaloguj się"
