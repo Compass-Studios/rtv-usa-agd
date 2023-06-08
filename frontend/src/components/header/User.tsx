@@ -1,50 +1,16 @@
 import {
   Avatar,
-  Box, Button,
-  Dialog,
-  DialogTitle,
-  FormControl,
+  Box,
   IconButton,
   Menu,
   MenuItem,
-  TextField,
   Tooltip
 } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
 import axios, {AxiosResponse} from "axios";
-
-interface IDialog {
-  open: boolean;
-  setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
-  isRegister: boolean;
-  handleSubmit(formData: IRegisterData | ILoginData): Promise<void>;
-}
-
-interface IRegisterData {
-  user: {
-    name: string;
-    email: string;
-    password: string;
-    password_confirmation: string;
-  }
-}
-
-interface ILoginData {
-  user: {
-    email: string;
-    password: string;
-  }
-}
-
-interface UserResponse {
-  logged_in: boolean;
-  user: {
-    id: number;
-    name: string;
-    email: string;
-  } | null
-}
+import DialogElement from "./DialogElement";
+import {IRegisterData, ILoginData, UserResponse} from "../../types";
+import { Link } from "react-router-dom";
 
 export default function User(): ReactElement {
     const [anchorMenu, setOpenAnchorMenu] = useState(null);
@@ -160,124 +126,25 @@ export default function User(): ReactElement {
               />
             </Box>
           :
-          <MenuItem
-            style={{background: "#2c2c2c"}}
-            sx={{color: "white", outline: "none", "&:hover": {background: "#2c2c2c"}}}
-            onClick={signOut}
-          >
-            Sign out
-          </MenuItem>
+          <Box>
+            <MenuItem
+              style={{background: "#2c2c2c"}}
+              sx={{color: "white", outline: "none", "&:hover": {background: "#2c2c2c"}}}
+              onClick={signOut}
+            >
+              Sign out
+            </MenuItem>
+            <MenuItem
+              style={{background: "#2c2c2c"}}
+              sx={{color: "white", outline: "none", "&:hover": {background: "#2c2c2c"}}}
+            >
+              <Link to='/account'>
+                My Account
+              </Link>
+            </MenuItem>
+          </Box>
         }
       </Menu>
     </>
   )
-}
-
-function DialogElement(props: IDialog): ReactElement {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirmation, setPasswordConfirmation] = useState('');
-
-  const handleRegister = () => {
-    const formData: IRegisterData = {
-      user: {
-        name,
-        email,
-        password,
-        password_confirmation: passwordConfirmation
-      }
-    };
-
-    props.handleSubmit(formData);
-    props.setOpen(false);
-  };
-
-  const handleLogin = () => {
-    const formData: ILoginData = {
-      user: {
-        email,
-        password
-      }
-    };
-
-    props.handleSubmit(formData);
-    props.setOpen(false);
-  };
-
-  return (
-    <Dialog open={props.open} onClose={() => props.setOpen(!props.open)}>
-      <Box sx={{display: "flex", padding: 2, background: "#2c2c2c"}}>
-        <DialogTitle sx={{flexGrow: 2, textAlign: "center"}} style={{padding: 0}}>
-          {
-            props.isRegister ? "Zarejestruj się" : "Zaloguj się"
-          }
-        </DialogTitle>
-        <IconButton onClick={() => props.setOpen(false)} style={{padding: 0}} sx={{
-          "&:hover": {
-            background: "#2c2c2c"
-          }
-        }}>
-          <CloseIcon/>
-        </IconButton>
-      </Box>
-      <form onSubmit={props.isRegister ? handleRegister : handleLogin}>
-        <FormControl
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            paddingLeft: 4,
-            paddingRight: 4,
-            paddingBottom: 2,
-            background: "#2c2c2c"
-          }}
-        >
-          {props.isRegister && (
-            <TextField
-              id="name"
-              placeholder="username"
-              variant="outlined"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              // Rest of the props
-            />
-          )}
-          <TextField
-            id="email"
-            placeholder="email"
-            variant="outlined"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            // Rest of the props
-          />
-          <TextField
-            id="password"
-            placeholder="hasło"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            // Rest of the props
-          />
-          {props.isRegister && (
-            <TextField
-              id="password_confirmation"
-              placeholder="Powtórz hasło"
-              type="password"
-              variant="outlined"
-              value={passwordConfirmation}
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
-              // Rest of the props
-            />
-          )}
-          <Button sx={{width: "fit-content", alignSelf: "center"}} type="submit" variant="contained">
-            {
-              props.isRegister ? "Zarejestruj się" : "Zaloguj się"
-            }
-          </Button>
-        </FormControl>
-      </form>
-    </Dialog>
-  );
 }

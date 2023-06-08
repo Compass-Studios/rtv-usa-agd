@@ -2,15 +2,7 @@ import {ReactElement, useEffect, useState} from "react";
 import Grid from '@mui/material/Grid';
 import {CircularProgress, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
-
-interface IElement {
-  id: number;
-  created_at: string;
-  name: string;
-  price: number;
-  updated_at: string;
-  image_sm: string;
-}
+import { IElement } from "../../types";
 
 export default function Products(): ReactElement {
   const [products, setProducts] = useState<any[]>([]);

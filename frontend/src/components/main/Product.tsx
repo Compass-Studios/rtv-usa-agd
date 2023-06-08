@@ -1,16 +1,7 @@
 import {ReactElement, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import {Box, List, ListItem, Typography} from "@mui/material";
-
-interface IProduct {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  created_at: string;
-  updated_at: string;
-  image_lg: string;
-}
+import { IProduct } from "../../types";
 
 export default function Product(): ReactElement {
 

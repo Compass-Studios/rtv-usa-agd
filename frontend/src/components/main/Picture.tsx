@@ -1,10 +1,7 @@
-import {ReactElement, useEffect, useState} from "react";
-import {Box} from "@mui/material";
+import { ReactElement, useEffect, useState } from "react";
+import { Box } from "@mui/material";
+import { IPicture } from "../../types";
 
-interface IPicture {
-  product_id: number;
-  image_url: string;
-}
 export default function Picture(): ReactElement {
 
   const [swapPicture, setSwapPicture] = useState(0);
@@ -15,7 +12,7 @@ export default function Picture(): ReactElement {
       .then(response => { return response.json() })
       .then(data => { setPictures(data) })
   }, []);
-  
+
 
   const click = (): void => {
     setSwapPicture((swapPicture + 1) % pictures.length);
