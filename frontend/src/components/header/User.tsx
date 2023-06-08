@@ -65,9 +65,11 @@ export default function User(): ReactElement {
 
   const signOut = async () => {
     try {
-      const response = await axios.delete('http://localhost:3000/users/logout');
+      await axios.delete('http://localhost:3000/users/logout');
       localStorage.setItem("data", JSON.stringify({ logged_in: false, user: null }))
       setTriggerEffect(prevState => !prevState);
+      window.location.href = "/";
+
     } catch(error) {
       console.error(error);
     }
@@ -105,12 +107,6 @@ export default function User(): ReactElement {
               >
                 Sign up
               </MenuItem>
-              <DialogElement
-                open={openRegister}
-                setOpen={setOpenRegister}
-                isRegister={true}
-                handleSubmit={handleSubmit}
-              />
               <MenuItem
                 style={{background: "#2c2c2c"}}
                 sx={{color: "white", outline: "none", "&:hover": {background: "#2c2c2c"}}}
@@ -118,12 +114,6 @@ export default function User(): ReactElement {
               >
                 Login
               </MenuItem>
-              <DialogElement
-                open={openLogin}
-                setOpen={setOpenLogin}
-                isRegister={false}
-                handleSubmit={handleSubmit}
-              />
             </Box>
           :
           <Box>
@@ -145,6 +135,20 @@ export default function User(): ReactElement {
           </Box>
         }
       </Menu>
+      <DialogElement
+        open={openRegister}
+        setOpen={setOpenRegister}
+        isRegister={true}
+        handleSubmit={handleSubmit}
+        handleCloseAnchor={handleCloseAnchorMenu}
+      />
+      <DialogElement
+        open={openLogin}
+        setOpen={setOpenLogin}
+        isRegister={false}
+        handleSubmit={handleSubmit}
+        handleCloseAnchor={handleCloseAnchorMenu}
+      />
     </>
   )
 }

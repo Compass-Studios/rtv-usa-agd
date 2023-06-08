@@ -5,6 +5,7 @@ export interface IDialog {
   setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
   isRegister: boolean;
   handleSubmit(formData: IRegisterData | ILoginData): Promise<void>;
+  handleCloseAnchor(): void
 }
 
 export interface IRegisterData {

@@ -1,4 +1,4 @@
-import { useState, ReactElement } from "react";
+import { useState, ReactElement, useEffect } from "react";
 import { Box, Button, Dialog, DialogTitle, FormControl, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {IRegisterData, IDialog, ILoginData} from "../../types";
@@ -34,6 +34,12 @@ export default function DialogElement(props: IDialog): ReactElement {
     props.handleSubmit(formData);
     props.setOpen(false);
   };
+
+  useEffect(() => {
+    if (props.open) {
+      props.handleCloseAnchor();
+    }
+  }, [props.open])
 
   return (
     <Dialog open={props.open} onClose={() => props.setOpen(!props.open)}>
