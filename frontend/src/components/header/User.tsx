@@ -10,7 +10,7 @@ import {
   TextField,
   Tooltip
 } from "@mui/material";
-import {ReactElement, useState} from "react";
+import { ReactElement, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import axios, {AxiosResponse} from "axios";
 
@@ -50,7 +50,8 @@ export default function User(): ReactElement {
     const [anchorMenu, setOpenAnchorMenu] = useState(null);
     const [openLogin, setOpenLogin] = useState(false);
     const [openRegister, setOpenRegister] = useState(false);
-    const [data, setData] = useState<UserResponse | null>(null);
+    const [data, setData] = useState<UserResponse | null>();
+
     const isRegisterData = (data: any): data is IRegisterData => {
     return (
       typeof data === "object" &&
@@ -88,6 +89,7 @@ export default function User(): ReactElement {
         formData
       );
       console.log(response.data);
+      localStorage.setItem('data', JSON.stringify(response.data));
       setData(response.data);
     } catch (error) {
       console.error(error);
@@ -97,7 +99,8 @@ export default function User(): ReactElement {
   const signOut = async () => {
     try {
       const response = await axios.delete('http://localhost:3000/users/logout');
-      setData({ logged_in: false, user: null });
+      localStorage.setItem("data", JSON.stringify({ logged_in: false, user: null }))
+      setData({ logged_in: false, user: null})
     } catch(error) {
       console.error(error);
     }
@@ -110,6 +113,12 @@ export default function User(): ReactElement {
   const handleCloseAnchorMenu = () => {
     setOpenAnchorMenu(null);
   }
+
+  useEffect(() => {
+    let data = localStorage.getItem('data');
+    let savedData: UserResponse = data ? JSON.parse(data) : null;
+    setData(savedData);
+  }, [data]);
 
   return (
     <>
