@@ -1,4 +1,5 @@
-import React from "react";
+import React, { ComponentType } from "react";
+import { RouteProps } from "react-router-dom";
 
 export interface IDialog {
   open: boolean;
@@ -55,4 +56,8 @@ export interface IElement {
 export interface IPicture {
   product_id: number;
   image_url: string;
+}
+
+export interface ProtectedRouteProps extends Omit<RouteProps, 'component'> {
+  component: ComponentType<any>;
 }
