@@ -46,6 +46,11 @@ export default function Account(): ReactElement {
           </Box>
         </Box>
       </Box>
+      <Box>
+        <h1 style={{ paddingTop: "2rem", fontWeight: "400", fontFamily: "Inter, sans-serif"}}>
+          My Orders
+        </h1>
+      </Box>
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Roboto+Slab&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Roboto+Slab&display=swap');

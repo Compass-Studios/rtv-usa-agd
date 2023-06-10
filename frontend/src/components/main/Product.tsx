@@ -1,7 +1,8 @@
 import {ReactElement, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import {Box, List, ListItem, Typography} from "@mui/material";
-import { IProduct } from "../../types";
+import { IProduct, UserResponse } from "../../types";
+import axios from "axios";
 
 export default function Product(): ReactElement {
 
@@ -18,6 +19,26 @@ export default function Product(): ReactElement {
     }
   }, []);
 
+  const handleBuy = async () => {
+    let dataStorage = localStorage.getItem('data');
+    let savedData: UserResponse = dataStorage ? JSON.parse(dataStorage) : null;
+
+    if (!savedData.logged_in) {
+      alert("You need to be logged to create that order");
+      return;
+    }
+    try {
+      const response = await axios.post("http://localhost:3000/orders", {
+        order: {
+          product: data.id,
+          quantity: 1
+        }
+      })
+      console.log(response.data)
+    } catch(error) {
+      console.error(error)
+    }
+  }
 
   return (
     <>
@@ -89,6 +110,7 @@ export default function Product(): ReactElement {
                   fontSize: "25px",
                   cursor: "pointer"
                 }}
+                onClick={handleBuy}
               >
                 Kup teraz
               </button>

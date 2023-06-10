@@ -1,13 +1,16 @@
-import {ReactElement, useEffect, useState} from "react";
+import { ReactElement, useContext, useEffect, useState } from "react";
 import Grid from '@mui/material/Grid';
 import {CircularProgress, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
 import { IElement } from "../../types";
+import { AppContext } from "../../AppContext";
 
 export default function Products(): ReactElement {
   const [products, setProducts] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [loadingFetch, setLoadingFetch] = useState(true);
+  const [filtered, setFiltered] = useState(false);
+  const { inputValue } = useContext(AppContext)!;
 
   useEffect(() => {
     fetch(`http://localhost:3000/products?page=${page}&limit=20`)
@@ -16,9 +19,26 @@ export default function Products(): ReactElement {
       })
       .then(data => {
         setProducts([...products, ...data]);
+        filterProducts();
         setLoadingFetch(false);
       })
   }, [page])
+
+  useEffect(() => {
+    filterProducts();
+  }, [inputValue]);
+
+  function filterProducts() {
+    if (inputValue !== '') {
+      const filteredProducts = products.filter(product => {
+        return product.name.toLowerCase().includes(inputValue.toLowerCase());
+      });
+      setProducts(filteredProducts);
+      setFiltered(true);
+    } else {
+      return;
+    }
+  }
 
   const handleScroll = () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
@@ -40,10 +60,11 @@ export default function Products(): ReactElement {
           products?.map((element: IElement) => {
             return (
               <Product
-                key={element.id + 20}
+                key={element.id + Math.random()}
                 id={element.id}
                 created_at={element.created_at}
-                name={element.name} price={element.price}
+                name={element.name}
+                price={element.price}
                 updated_at={element.updated_at}
                 image_sm={element.image_sm}
               />

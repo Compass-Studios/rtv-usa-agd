@@ -1,4 +1,4 @@
-import {ReactElement} from "react";
+import { ChangeEvent, ReactElement, useContext, useState } from "react";
 import {
   AppBar,
   Box,
@@ -9,8 +9,21 @@ import {
 } from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import User from "./User";
+import { AppContext } from "../../AppContext";
 
 export default function Header(): ReactElement {
+
+  const { handleChange } = useContext(AppContext)!;
+  const [inputText, setInputText] = useState('');
+  const handleChangeValue = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setInputText(event.target.value);
+  }
+
+  const handleSubmit = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleChange(inputText);
+    }
+  }
 
   return (
     <AppBar position="static" sx={{ background: "#2c2c2c"}}>
@@ -64,6 +77,9 @@ export default function Header(): ReactElement {
                 }
               }}
               variant="outlined"
+              onChange={handleChangeValue}
+              onKeyDown={handleSubmit}
+              value={inputText}
             />
             <User />
           </Box>

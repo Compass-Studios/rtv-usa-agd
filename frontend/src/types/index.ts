@@ -1,4 +1,4 @@
-import React, { ComponentType } from "react";
+import React, { ComponentType, ReactNode } from "react";
 import { RouteProps } from "react-router-dom";
 
 export interface IDialog {
@@ -60,4 +60,13 @@ export interface IPicture {
 
 export interface ProtectedRouteProps extends Omit<RouteProps, 'component'> {
   component: ComponentType<any>;
+}
+
+export interface AppContextProps {
+  inputValue: string;
+  handleChange: (value: string) => void;
+}
+
+export interface AppProviderProps {
+  children: ReactNode;
 }
