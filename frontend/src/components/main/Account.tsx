@@ -1,10 +1,13 @@
 import { ReactElement, useEffect, useState } from "react";
-import { UserResponse } from "../../types";
-import { Avatar, Box, Container } from "@mui/material";
+import { IDelivery, UserResponse } from "../../types";
+import { Avatar, Box, CircularProgress, Container } from "@mui/material";
+import axios from "axios";
 
 export default function Account(): ReactElement {
 
   const [data, setData] = useState<UserResponse | null>();
+  const [delivery, setDelivery] = useState<IDelivery[] | null>();
+  const [loadingImage, setLoadingImage] = useState(true);
 
   useEffect(() => {
     const getData = localStorage.getItem('data');
@@ -12,6 +15,46 @@ export default function Account(): ReactElement {
     setData(parsedData);
   }, []);
 
+  useEffect(() => {
+    async function fetchDelivery() {
+      try {
+        const response = await axios.get('http://localhost:3000/orders', { withCredentials: true });
+        const deliveryResponse = response.data;
+
+        // Create a map to store products by their unique IDs
+        const productMap = new Map<number, IDelivery>();
+
+        await Promise.all(
+          deliveryResponse.map(async (item: IDelivery) => {
+            const productResponse = await axios.get(`http://localhost:3000/products/${item.product.id}?fields=image_lg`);
+            const imageLg = productResponse.data.image_lg;
+
+            if (productMap.has(item.product.id)) {
+              const existingProduct = productMap.get(item.product.id);
+              if (existingProduct) {
+                existingProduct.quantity += item.quantity;
+              }
+            } else {
+              const updatedItem = {
+                ...item,
+                product: {
+                  ...item.product,
+                  imageLg: imageLg,
+                },
+              };
+              productMap.set(item.product.id, updatedItem);
+            }
+          })
+        );
+        // Convert the map values back to an array
+        const updatedDelivery = Array.from(productMap.values());
+        setDelivery(updatedDelivery);
+      } catch(error) {
+        console.error(error);
+      }
+    }
+    fetchDelivery();
+  }, []);
 
   return (
     <Container sx={{ display: "flex", flexDirection: "column", gap: "2rem"}}>
@@ -46,10 +89,53 @@ export default function Account(): ReactElement {
           </Box>
         </Box>
       </Box>
-      <Box>
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "2rem", paddingBottom: "2rem"}}>
         <h1 style={{ paddingTop: "2rem", fontWeight: "400", fontFamily: "Inter, sans-serif"}}>
           My Orders
         </h1>
+        <ul style={{ listStyle: "none", width: "100%", display: "flex", flexDirection: "column", gap: "1rem"}}>
+          {
+            delivery?.map((product) => {
+              const dateString = product.created_at;
+              const date = new Date(dateString);
+              const formattedDate = date.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+              }).replace(/\//g, '.');
+              return (
+                <li style={{ display: "flex", padding: "1.5rem", background: "#2f2f2f", borderRadius: "24px", gap: "1.5rem" }}>
+                  <Box>
+                    {
+                      loadingImage ?
+                        (
+                          <CircularProgress />
+                        )
+                      :
+                        null
+                    }
+                    <img
+                      src={`http://localhost:3000/${product.product.imageLg}`}
+                      onLoad={() => setLoadingImage(false)}
+                      width={172}
+                      alt="product"
+                      style={ loadingImage ? { display: "none"} : { borderRadius: "6px" } }
+                    />
+                  </Box>
+                  <Box>
+                    <h2 style={{ fontFamily: "Inter, sans-serif", fontWeight: "400", paddingBottom: "1rem"}}>
+                      {product.product.name}
+                    </h2>
+                    <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>Status: {product.status}</h3>
+                    <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>Data zamówienia: {formattedDate}</h3>
+                    <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>Ilość: {product.quantity}</h3>
+                    <h3 style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>Cena: {product.price} zł</h3>
+                  </Box>
+                </li>
+              );
+            })
+          }
+        </ul>
       </Box>
       <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Roboto+Slab&display=swap');

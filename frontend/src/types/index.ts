@@ -58,6 +58,21 @@ export interface IPicture {
   image_url: string;
 }
 
+export interface IDelivery {
+  id: number;
+  price: number;
+  quantity: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  product: {
+    id: number;
+    name: string;
+    imageLg?: string
+  }
+}
+
+
 export interface ProtectedRouteProps extends Omit<RouteProps, 'component'> {
   component: ComponentType<any>;
 }

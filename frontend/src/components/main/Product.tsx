@@ -1,6 +1,6 @@
 import {ReactElement, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import {Box, List, ListItem, Typography} from "@mui/material";
+import { Box, CircularProgress, List, ListItem, Typography } from "@mui/material";
 import { IProduct, UserResponse } from "../../types";
 import axios from "axios";
 
@@ -8,6 +8,7 @@ export default function Product(): ReactElement {
 
   const { id } = useParams();
   const [data, setData] = useState<IProduct>(  { id: 0, name: "", price: 0, description: "", created_at: "", updated_at: "", image_lg: ""});
+  const [loadingImage, setLoadingImage] = useState(true);
 
 
   useEffect(() => {
@@ -28,13 +29,12 @@ export default function Product(): ReactElement {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:3000/orders", {
+      await axios.post("http://localhost:3000/orders", {
         order: {
           product: data.id,
           quantity: 1
         }
-      })
-      console.log(response.data)
+      }, { withCredentials: true });
     } catch(error) {
       console.error(error)
     }
@@ -55,14 +55,27 @@ export default function Product(): ReactElement {
             }
           }}
         >
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
+            {
+              loadingImage ?
+                (
+                  <Box sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <CircularProgress />
+                  </Box>
+                )
+              :
+                null
+            }
           <img
             width="581px"
             height="554px"
+            onLoad={() => setLoadingImage(false)}
             className="product-image"
             src={`http://localhost:3000/${data.image_lg}`}
             alt="produkt"
             style={{ borderRadius: "19px" }}
           />
+          </Box>
           <Box sx={{ width: "37%", height: "90%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <Box>
               <Typography
