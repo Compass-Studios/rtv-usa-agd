@@ -29,12 +29,6 @@ export default function Account(): ReactElement {
             const productResponse = await axios.get(`http://localhost:3000/products/${item.product.id}?fields=image_lg`);
             const imageLg = productResponse.data.image_lg;
 
-            if (productMap.has(item.product.id)) {
-              const existingProduct = productMap.get(item.product.id);
-              if (existingProduct) {
-                existingProduct.quantity += item.quantity;
-              }
-            } else {
               const updatedItem = {
                 ...item,
                 product: {
@@ -43,7 +37,6 @@ export default function Account(): ReactElement {
                 },
               };
               productMap.set(item.product.id, updatedItem);
-            }
           })
         );
         // Convert the map values back to an array

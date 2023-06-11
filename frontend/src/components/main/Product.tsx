@@ -1,6 +1,6 @@
 import {ReactElement, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import { Box, CircularProgress, List, ListItem, Typography } from "@mui/material";
+import { Box, CircularProgress,  Typography } from "@mui/material";
 import { IProduct, UserResponse } from "../../types";
 import axios from "axios";
 
@@ -29,10 +29,11 @@ export default function Product(): ReactElement {
       return;
     }
     try {
+      let quantityOfProduct = Number(prompt("Podaj ilość produktu", "1"));
       await axios.post("http://localhost:3000/orders", {
         order: {
           product: data.id,
-          quantity: 1
+          quantity: quantityOfProduct
         }
       }, { withCredentials: true });
     } catch(error) {
