@@ -6,12 +6,28 @@ services:
       context: .
       dockerfile: backend.Dockerfile
     restart: unless-stopped
-#    environment:
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: rtv-usa-agd
+      DATABASE_USER: rtv-usa-agd
+      DATABASE_PASSWORD: password
 #      RAILS_ENV: production
 #      # When run in production, generate a secret with `rails secret | cut -c-32` inside the container
 #      RAILS_MASTER_KEY: paste_the_key_here
     ports:
       - '3000:3000'
     volumes:
-      - ./docker-data:/data
       - ./docker-data/storage:/app/storage
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+#    ports:
+#        - '5432:5432'
+    environment:
+      POSTGRES_USER: rtv-usa-agd
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rtv-usa-agd
+    volumes:
+        - ./docker-data/db:/var/lib/postgresql/data
