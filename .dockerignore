@@ -37,6 +37,7 @@ openapi.yml
 README.md
 *Dockerfile
 docker-compose.yml
+docker-data
 .git
 .gitignore
 .gitattributes
