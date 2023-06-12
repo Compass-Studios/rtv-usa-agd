@@ -68,8 +68,8 @@ export interface IDelivery {
   product: {
     id: number;
     name: string;
-    imageLg?: string
   }
+  imageLg?: string;
 }
 
 

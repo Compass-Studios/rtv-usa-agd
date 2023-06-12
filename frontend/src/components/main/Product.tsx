@@ -1,5 +1,5 @@
 import {ReactElement, useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Box, CircularProgress,  Typography } from "@mui/material";
 import { IProduct, UserResponse } from "../../types";
 import axios from "axios";
@@ -36,6 +36,7 @@ export default function Product(): ReactElement {
           quantity: quantityOfProduct
         }
       }, { withCredentials: true });
+      alert("Zamówiono produkt");
     } catch(error) {
       console.error(error)
     }

@@ -21,26 +21,12 @@ export default function Account(): ReactElement {
         const response = await axios.get('http://localhost:3000/orders', { withCredentials: true });
         const deliveryResponse = response.data;
 
-        // Create a map to store products by their unique IDs
-        const productMap = new Map<number, IDelivery>();
-
-        await Promise.all(
-          deliveryResponse.map(async (item: IDelivery) => {
-            const productResponse = await axios.get(`http://localhost:3000/products/${item.product.id}?fields=image_lg`);
-            const imageLg = productResponse.data.image_lg;
-
-              const updatedItem = {
-                ...item,
-                product: {
-                  ...item.product,
-                  imageLg: imageLg,
-                },
-              };
-              productMap.set(item.product.id, updatedItem);
-          })
-        );
-        // Convert the map values back to an array
-        const updatedDelivery = Array.from(productMap.values());
+        // Fetch image_lg for each product.id
+        const updatedDelivery = await Promise.all(deliveryResponse.map(async (item: IDelivery) => {
+          const productResponse = await axios.get(`http://localhost:3000/products/${item.product.id}?fields=image_lg`);
+          const imageLg = productResponse.data.image_lg;
+          return { ...item, imageLg }; // Merge imageLg into the item object
+        }));
         setDelivery(updatedDelivery);
       } catch(error) {
         console.error(error);
@@ -108,7 +94,7 @@ export default function Account(): ReactElement {
                         null
                     }
                     <img
-                      src={`http://localhost:3000/${product.product.imageLg}`}
+                      src={`http://localhost:3000/${product.imageLg}`}
                       onLoad={() => setLoadingImage(false)}
                       width={172}
                       alt="product"
