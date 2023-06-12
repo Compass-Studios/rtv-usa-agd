@@ -2,15 +2,18 @@
 Rails + React
 
 ## Development
-0. Install [Ruby 3.2.2](https://www.ruby-lang.org/en/documentation/installation/), Node.js and a `vips` package (or `vips-tools`, or `libvips` depending on your Linux distribution. I have no idea about Windows)
+0. Install [Ruby 3.2.2](https://www.ruby-lang.org/en/documentation/installation/), Node.js and a `vips` package (or `vips-tools`, or `libvips` depending on your Linux distribution. I have no idea about Windows), and `postgresql-devel` (or `libpq-dev` on debain-based distros)
+   Set up a PostgreSQL database
 1. Clone the repository
-2. Run the following snippet from the repository root to install dependencies and run database migrations, and populate DB with example data
+2. Export required environment variables: `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`, and optionally `DATABASE_PORT`
+3. Run the following snippet from the repository root to install dependencies and run database migrations, and populate DB with example data
 ```sh
 bundle install
 npm --prefix frontend install
-rails db:setup
+rails db:migrate
+rails db:seed
 ```
-3. Start the development server by running `bin/dev`. It will start both the Rails and Vite dev servers. If you're on Windows, good luck with that, because I have no idea how to do it. Try WSL, or smthg, idk  
+4. Start the development server by running `bin/dev`. It will start both the Rails and Vite dev servers. If you're on Windows, good luck with that, because I have no idea how to do it. Try WSL, or smthg, idk  
    Alternatively, you can start Vite and Rails separately, with `npm --prefix frontend run dev` and `rails s`.
 
 ### Running backend in Docker
@@ -19,9 +22,10 @@ rails db:setup
 1. After you're done installing Docker, open the terminal (either Powershell or Linux terminal, depending on your installation type). Navigate to the project root and run the following commands to build a Docker image of a project, run database migrations and populate DB with example data:
 ```shell
 docker compose build
-docker compose run backend rails db:setup
+docker compose run backend rails db:migrate
+docker compose run backend rails db:seed
 ```
-> Info  
+> **Note**  
 > If docker cli requires you to use sudo, follow these instructions to add your user to the docker group:
 > https://docs.docker.com/engine/install/linux-postinstall/
 
