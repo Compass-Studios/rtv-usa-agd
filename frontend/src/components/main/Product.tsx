@@ -1,20 +1,14 @@
 import {ReactElement, useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
-import {Box, List, ListItem, Typography} from "@mui/material";
-
-interface IProduct {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Navigate, useParams } from "react-router-dom";
+import { Box, CircularProgress,  Typography } from "@mui/material";
+import { IProduct, UserResponse } from "../../types";
+import axios from "axios";
 
 export default function Product(): ReactElement {
 
   const { id } = useParams();
-  const [data, setData] = useState<IProduct>(  { id: 0, name: "", price: 0, description: "", created_at: "", updated_at: "",});
+  const [data, setData] = useState<IProduct>(  { id: 0, name: "", price: 0, description: "", created_at: "", updated_at: "", image_lg: ""});
+  const [loadingImage, setLoadingImage] = useState(true);
 
 
   useEffect(() => {
@@ -25,18 +19,65 @@ export default function Product(): ReactElement {
       console.log(data)
     }
   }, []);
-  
+
+  const handleBuy = async () => {
+    let dataStorage = localStorage.getItem('data');
+    let savedData: UserResponse = dataStorage ? JSON.parse(dataStorage) : null;
+
+    if (!savedData.logged_in) {
+      alert("You need to be logged to create that order");
+      return;
+    }
+    try {
+      let quantityOfProduct = Number(prompt("Podaj ilość produktu", "1"));
+      await axios.post("http://localhost:3000/orders", {
+        order: {
+          product: data.id,
+          quantity: quantityOfProduct
+        }
+      }, { withCredentials: true });
+      alert("Zamówiono produkt");
+    } catch(error) {
+      console.error(error)
+    }
+  }
 
   return (
     <>
       <Box sx={{ width: "100%", height: "70vh", display: "flex", justifyContent: "center", alignItems: "center"}}>
-        <Box sx={{ width: "65%", display: "flex", justifyContent: "space-between", height: "80%", alignItems: "center" }}>
+        <Box
+          sx={{
+            width: "65%",
+            display: "flex",
+            justifyContent: "space-between",
+            height: "80%",
+            alignItems: "center",
+            '@media screen and (max-width: 1600px)': {
+              height: "70%"
+            }
+          }}
+        >
+          <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
+            {
+              loadingImage ?
+                (
+                  <Box sx={{ width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                    <CircularProgress />
+                  </Box>
+                )
+              :
+                null
+            }
           <img
             width="581px"
             height="554px"
-            src="https://media.discordapp.net/attachments/916382989905186819/1103338067596673106/image.png?width=704&height=671"
+            onLoad={() => setLoadingImage(false)}
+            className="product-image"
+            src={`http://localhost:3000/${data.image_lg}`}
             alt="produkt"
+            style={{ borderRadius: "19px" }}
           />
+          </Box>
           <Box sx={{ width: "37%", height: "90%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
             <Box>
               <Typography
@@ -84,6 +125,7 @@ export default function Product(): ReactElement {
                   fontSize: "25px",
                   cursor: "pointer"
                 }}
+                onClick={handleBuy}
               >
                 Kup teraz
               </button>
