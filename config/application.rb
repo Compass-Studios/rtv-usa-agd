@@ -18,5 +18,8 @@ module RtvUsaAgd
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Required for host authorization in production
+    config.hosts << ENV['HOSTNAME']
   end
 end
