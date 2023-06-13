@@ -61,7 +61,7 @@ export default function User(): ReactElement {
       localStorage.setItem('data', JSON.stringify(response.data));
       setTriggerEffect(prevState => !prevState);
       alert("Pomyślnie zalogowano")
-    } catch (error: AxiosError) {
+    } catch (error: any) {
       if (error.response.status === 401) {
         alert("Nazwa użytkownika lub hasło są niepoprawne");
       }
