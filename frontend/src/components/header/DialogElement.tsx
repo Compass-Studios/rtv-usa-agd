@@ -77,6 +77,7 @@ export default function DialogElement(props: IDialog): ReactElement {
               value={name}
               onChange={(e) => setName(e.target.value)}
               autoFocus
+              sx={{ input: { color: "white", }, outline: "1px solid #aaa", borderRadius: ".25rem"}}
             />
           )}
           <TextField
@@ -86,6 +87,7 @@ export default function DialogElement(props: IDialog): ReactElement {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
+            sx={{ input: { color: "white", }, outline: "1px solid #aaa", borderRadius: ".25rem"}}
           />
           <TextField
             id="password"
@@ -95,6 +97,7 @@ export default function DialogElement(props: IDialog): ReactElement {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoFocus
+            sx={{ input: { color: "white", }, outline: "1px solid #aaa", borderRadius: ".25rem"}}
           />
           {props.isRegister && (
             <TextField
@@ -105,6 +108,7 @@ export default function DialogElement(props: IDialog): ReactElement {
               value={passwordConfirmation}
               onChange={(e) => setPasswordConfirmation(e.target.value)}
               autoFocus
+              sx={{ input: { color: "white", }, outline: "1px solid #aaa", borderRadius: ".25rem"}}
             />
           )}
           <Button sx={{width: "fit-content", alignSelf: "center"}} type="submit" variant="contained">
