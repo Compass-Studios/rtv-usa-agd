@@ -13,7 +13,7 @@ export default function Product(): ReactElement {
 
 
   useEffect(() => {
-    fetch(`http://localhost:3000/products/${id}`)
+    fetch(`${import.meta.env.VITE_API_URL}/products/${id}`)
       .then(response => { return response.json() })
       .then(data => setData(data))
     if (data.id > 0) {
@@ -31,7 +31,7 @@ export default function Product(): ReactElement {
     }
     try {
       let quantityOfProduct = Number(prompt("Podaj ilość produktu", "1"));
-      await axios.post("http://localhost:3000/orders", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/orders`, {
         order: {
           product: data.id,
           quantity: quantityOfProduct
@@ -74,7 +74,7 @@ export default function Product(): ReactElement {
             height="554px"
             onLoad={() => setLoadingImage(false)}
             className="product-image"
-            src={`http://localhost:3000/${data.image_lg}`}
+            src={`${import.meta.env.VITE_API_URL}/${data.image_lg}`}
             alt="produkt"
             style={{ borderRadius: "19px" }}
           />

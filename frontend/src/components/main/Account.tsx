@@ -18,12 +18,12 @@ export default function Account(): ReactElement {
   useEffect(() => {
     async function fetchDelivery() {
       try {
-        const response = await axios.get('http://localhost:3000/orders', { withCredentials: true });
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders`, { withCredentials: true });
         const deliveryResponse = response.data;
 
         // Fetch image_lg for each product.id
         const updatedDelivery = await Promise.all(deliveryResponse.map(async (item: IDelivery) => {
-          const productResponse = await axios.get(`http://localhost:3000/products/${item.product.id}?fields=image_lg`);
+          const productResponse = await axios.get(`${import.meta.env.VITE_API_URL}/products/${item.product.id}?fields=image_lg`);
           const imageLg = productResponse.data.image_lg;
           return { ...item, imageLg }; // Merge imageLg into the item object
         }));
@@ -94,7 +94,7 @@ export default function Account(): ReactElement {
                         null
                     }
                     <img
-                      src={`http://localhost:3000/${product.imageLg}`}
+                      src={`${import.meta.env.VITE_API_URL}/${product.imageLg}`}
                       onLoad={() => setLoadingImage(false)}
                       width={172}
                       alt="product"

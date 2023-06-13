@@ -13,7 +13,7 @@ export default function Products(): ReactElement {
   const { inputValue } = useContext(AppContext)!;
 
   useEffect(() => {
-    fetch(`http://localhost:3000/products?page=${page}&limit=20`)
+    fetch(`${import.meta.env.VITE_API_URL}/products?page=${page}&limit=20`)
       .then(response => {
         return response.json()
       })
@@ -90,7 +90,7 @@ function Product(element: IElement): ReactElement {
             null
         }
         <img
-          src={`http://localhost:3000/${element.image_sm}`}
+          src={`${import.meta.env.VITE_API_URL}/${element.image_sm}`}
           onLoad={() => setLoadingImage(false)}
           width={172}
           alt="product"

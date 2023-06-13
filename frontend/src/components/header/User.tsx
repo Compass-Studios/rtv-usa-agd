@@ -52,7 +52,7 @@ export default function User(): ReactElement {
 
     try {
       const response: AxiosResponse = await axios.post(
-        `http://localhost:3000/users/${requestUrl}`,
+        `${import.meta.env.VITE_API_URL}/users/${requestUrl}`,
         formData,
         { withCredentials: true }
       );
@@ -66,7 +66,7 @@ export default function User(): ReactElement {
 
   const signOut = async () => {
     try {
-      await axios.delete('http://localhost:3000/users/logout', { withCredentials: true });
+      await axios.delete(`${import.meta.env.VITE_API_URL}/users/logout`, { withCredentials: true });
       localStorage.setItem("data", JSON.stringify({ logged_in: false, user: null }))
       setTriggerEffect(prevState => !prevState);
       window.location.href = "/";

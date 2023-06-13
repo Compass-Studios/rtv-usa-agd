@@ -9,7 +9,7 @@ export default function Picture(): ReactElement {
   const [loadingImage, setLoadingImage] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/featured_products")
+    fetch(`${import.meta.env.VITE_API_URL}/featured_products`)
       .then(response => { return response.json() })
       .then(data => { setPictures(data) })
   }, []);
@@ -33,7 +33,7 @@ export default function Picture(): ReactElement {
                     null
                 }
                 <img
-                  src={`http://localhost:3000/${picture.image_url}`}
+                  src={`${import.meta.env.VITE_API_URL}/${picture.image_url}`}
                   alt="zdjęcie2"
                   className="zdjecie"
                   onLoad={() => setLoadingImage(false)}
