@@ -78,7 +78,7 @@ function Product(element: IElement): ReactElement {
             null
         }
         <img
-          src={`${import.meta.env.VITE_API_URL}/${element.image_sm}`}
+          src={`${import.meta.env.VITE_API_DOMAIN}${element.image_sm}`}
           onLoad={() => setLoadingImage(false)}
           width={172}
           alt="product"

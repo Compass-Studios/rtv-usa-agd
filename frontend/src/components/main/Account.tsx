@@ -94,7 +94,7 @@ export default function Account(): ReactElement {
                         null
                     }
                     <img
-                      src={`${import.meta.env.VITE_API_URL}/${product.imageLg}`}
+                      src={`${import.meta.env.VITE_API_DOMAIN}${product.imageLg}`}
                       onLoad={() => setLoadingImage(false)}
                       width={172}
                       alt="product"

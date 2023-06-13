@@ -74,7 +74,7 @@ export default function Product(): ReactElement {
             height="554px"
             onLoad={() => setLoadingImage(false)}
             className="product-image"
-            src={`${import.meta.env.VITE_API_URL}/${data.image_lg}`}
+            src={`${import.meta.env.VITE_API_DOMAIN}${data.image_lg}`}
             alt="produkt"
             style={{ borderRadius: "19px" }}
           />
