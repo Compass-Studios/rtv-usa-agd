@@ -36,12 +36,18 @@ docker compose up
 
 3. Keep in mind that every time backend code is updated, you have to rebuild the container and apply new migrations.
 
-### How to manually add products
-1. Run `rails c` to get interactive Rails console  
+### Using admin panel
+Just go to http://localhost:3000/admin and log in using an admin account
+
+> **Note**  
+> If you ran `rails db:seed`, it generated a default admin user with email `admin@rtv-usa-agd.com` and password `admin`
+
+#### Creating admin users
+1. If you want to create and admin user, run `rails c` to get interactive Rails console  
    If backend is run inside a Docker container, use `docker compose run backend rails c` instead.
 2. Paste the following snippet, replace the values, and press enter
 ```rb
-Product.new(name: "Test Product", price: 12.34, description: "Lorem ipsum").save
+AdminUser.create!(email: 'admin@rtv-usa-agd.com', password: 'admin')
 ```
 3. Type `exit` to exit the Rails console
 
