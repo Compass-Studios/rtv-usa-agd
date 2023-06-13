@@ -33,7 +33,7 @@ export default function Picture(): ReactElement {
                     null
                 }
                 <img
-                  src={`${import.meta.env.VITE_API_URL}/${picture.image_url}`}
+                  src={`${import.meta.env.VITE_API_DOMAIN}${picture.image_url}`}
                   alt="zdjęcie2"
                   className="zdjecie"
                   onLoad={() => setLoadingImage(false)}
