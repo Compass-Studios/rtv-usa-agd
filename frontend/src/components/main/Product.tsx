@@ -3,6 +3,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { Box, CircularProgress,  Typography } from "@mui/material";
 import { IProduct, UserResponse } from "../../types";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 export default function Product(): ReactElement {
 
@@ -135,14 +136,18 @@ export default function Product(): ReactElement {
       </Box>
       <Box sx={{ height: "50vh", width: "100%", display: "flex", justifyContent: "center" }}>
         <Box sx={{ background: "#1C1C1C", width: "68%", height: "fit-content", borderRadius: "19px", padding: 5 }}>
-          <Typography variant="h4" textAlign="center">
+          <Typography sx={{ paddingBottom: "2rem", margin: 0 }} variant="h2" textAlign="center">
             Opis
           </Typography>
-          <Typography variant="h5" sx={{ width: "fit-content", fontSize: "20px", fontWeight: 300 }}>
+          <ReactMarkdown components={{ p: ({node, ...props}) => <p style={{ width: "fit-content", fontSize: "20px", fontWeight: 400, fontFamily: "Inter, sans-serif" }} {...props}></p>}}>
             {data.description}
-          </Typography>
+          </ReactMarkdown>
         </Box>
       </Box>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Roboto+Slab&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Roboto+Slab&display=swap');
+      </style>
     </>
   )
 }
