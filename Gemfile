@@ -44,6 +44,7 @@ gem "image_processing", "~> 1.2"
 # Admin panel
 gem "administrate", "~> 0.18.0"
 gem "administrate-field-active_storage", "~> 0.4.2"
+gem "clearance", "~> 2.6"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

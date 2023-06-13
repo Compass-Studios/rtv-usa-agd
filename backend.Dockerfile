@@ -7,7 +7,7 @@ RUN apt update \
 WORKDIR /app
 COPY Gemfile Gemfile.lock ./
 RUN bundle install \
-    && apt remove -y make gcc \
+    && apt remove -y make gcc g++ \
     && apt autoremove -y
 
 COPY . .
