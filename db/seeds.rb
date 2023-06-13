@@ -52,3 +52,6 @@ rand(3..5).times do
 end
 
 puts "\nDatabase populated with #{FeaturedProduct.count} featured products"
+
+AdminUser.create!(email: 'admin@rtv-usa-agd.com', password: 'admin')
+puts "\nDefault admin user email: 'admin@rtv-usa-agd.com', password: 'admin'"
