@@ -13,7 +13,7 @@ export default function Products(): ReactElement {
   const { inputValue } = useContext(AppContext)!;
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/products?page=${page}&limit=20`)
+    fetch(`${import.meta.env.VITE_API_URL}/products`)
       .then(response => {
         return response.json()
       })
@@ -22,7 +22,7 @@ export default function Products(): ReactElement {
         filterProducts();
         setLoadingFetch(false);
       })
-  }, [page])
+  }, [])
 
   useEffect(() => {
     filterProducts();
@@ -39,18 +39,6 @@ export default function Products(): ReactElement {
       return;
     }
   }
-
-  const handleScroll = () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      setPage(page + 1);
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <>
