@@ -7,7 +7,7 @@ import {
   Tooltip
 } from "@mui/material";
 import { ReactElement, useEffect, useState } from "react";
-import axios, {AxiosResponse} from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import DialogElement from "./DialogElement";
 import {IRegisterData, ILoginData, UserResponse} from "../../types";
 import { Link } from "react-router-dom";
@@ -50,6 +50,7 @@ export default function User(): ReactElement {
       requestUrl = "login";
     }
 
+
     try {
       const response: AxiosResponse = await axios.post(
         `${import.meta.env.VITE_API_URL}/users/${requestUrl}`,
@@ -59,8 +60,11 @@ export default function User(): ReactElement {
       console.log(response.data);
       localStorage.setItem('data', JSON.stringify(response.data));
       setTriggerEffect(prevState => !prevState);
-    } catch (error) {
-      console.error(error);
+      alert("Pomyślnie zalogowano")
+    } catch (error: AxiosError) {
+      if (error.response.status === 401) {
+        alert("Nazwa użytkownika lub hasło są niepoprawne");
+      }
     }
   };
 
