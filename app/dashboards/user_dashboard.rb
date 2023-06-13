@@ -35,8 +35,8 @@ class UserDashboard < Administrate::BaseDashboard
     id
     email
     name
-    orders
     password_digest
+    orders
     created_at
     updated_at
   ].freeze
@@ -47,8 +47,8 @@ class UserDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = %i[
     email
     name
-    orders
     password_digest
+    orders
   ].freeze
 
   # COLLECTION_FILTERS
