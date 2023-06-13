@@ -136,17 +136,16 @@ export default function Product(): ReactElement {
       </Box>
       <Box sx={{ height: "50vh", width: "100%", display: "flex", justifyContent: "center" }}>
         <Box sx={{ background: "#1C1C1C", width: "68%", height: "fit-content", borderRadius: "19px", padding: 5 }}>
-          <Typography sx={{ paddingBottom: "2rem", margin: 0 }} variant="h2" textAlign="center">
+          <Typography sx={{ paddingBottom: "1rem", margin: 0 }} variant="h2" textAlign="center">
             Opis
           </Typography>
-          <ReactMarkdown components={{ p: ({node, ...props}) => <p style={{ width: "fit-content", fontSize: "20px", fontWeight: 400, fontFamily: "Inter, sans-serif" }} {...props}></p>}}>
+          <ReactMarkdown components={{ p: ({node, ...props}) => <p style={{ width: "fit-content", fontSize: "20px", fontWeight: 400, fontFamily: "Inter, sans-serif" }} {...props}></p>, h2: ({node, ...props}) => <h2 style={{ whiteSpace: "pre-wrap", width: "fit-content", fontSize: "32px", marginBlock: "1rem", fontWeight: 600, fontFamily: "Inter, sans-serif" }} {...props}></h2>,  h3: ({node, ...props}) => <h3 style={{ whiteSpace: "pre-wrap", width: "fit-content", fontSize: "12px", marginTop: "2rem", fontWeight: 400, fontFamily: "Inter, sans-serif" }} {...props}></h3>}}>
             {data.description}
           </ReactMarkdown>
         </Box>
       </Box>
       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Roboto+Slab&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400&family=Roboto+Slab&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Roboto+Slab&display=swap');
       </style>
     </>
   )
