@@ -40,7 +40,7 @@ export default function Account(): ReactElement {
       <h1 style={{ paddingTop: "2rem", fontWeight: "400", fontFamily: "Inter, sans-serif"}}>
         My Account
       </h1>
-      <Box sx={{ width: "100%", background: "#2f2f2f", height: "35vh", borderRadius: "24px", display: "flex" }}>
+      <Box sx={{ width: "100%", background: "#2f2f2f", paddingBlock: "32px", borderRadius: "24px", display: "flex" }}>
         <Box sx={{ width: "20%", display: "flex", justifyContent: "center", height: "60%", alignItems: "flex-end"}}>
           <Avatar sx={{ width: "180px", height: "180px" }} alt="logo"/>
         </Box>
