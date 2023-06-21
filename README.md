@@ -1,8 +1,9 @@
 # RTV USA AGD
-Rails + React
+Online store with electronics and household appliances, made with Rails and React
+![screenshot](https://github.com/Compass-Studios/rtv-usa-agd/assets/70489677/8d2392b0-a6f2-48bb-bbc3-682c1bb3e8ab)
 
 ## Development
-0. Install [Ruby 3.2.2](https://www.ruby-lang.org/en/documentation/installation/), Node.js and a `vips` package (or `vips-tools`, or `libvips` depending on your Linux distribution. I have no idea about Windows), and `postgresql-devel` (or `libpq-dev` on debain-based distros)
+0. Install [Ruby 3.2.2](https://www.ruby-lang.org/en/documentation/installation/), Node.js and a `vips` package (or `vips-tools`, or `libvips` depending on your Linux distribution. I have no idea about Windows), and `postgresql-devel` (or `libpq-dev` on debain-based distros)  
    Set up a PostgreSQL database
 1. Clone the repository
 2. Export required environment variables: `DATABASE_HOST`, `DATABASE_NAME`, `DATABASE_USER`, `DATABASE_PASSWORD`, and optionally `DATABASE_PORT`
@@ -36,6 +37,10 @@ docker compose up
 
 3. Keep in mind that every time backend code is updated, you have to rebuild the container and apply new migrations.
 
+### API Documentation
+In your IDE open the file [openapi.yaml](openapi.yaml) and install the OpenAPI Specification plugin from JetBrains
+![screenshot](https://cdn.discordapp.com/attachments/969317854635769929/1091670517859242014/image.png)
+
 ### Using admin panel
 Just go to http://localhost:3000/admin and log in using an admin account
 
@@ -51,6 +56,98 @@ AdminUser.create!(email: 'admin@rtv-usa-agd.com', password: 'admin')
 ```
 3. Type `exit` to exit the Rails console
 
-## API Documentation
-In your IDE open the file [openapi.yaml](openapi.yaml) and install the OpenAPI Specification plugin from JetBrains
-![screenshot](https://cdn.discordapp.com/attachments/969317854635769929/1091670517859242014/image.png)
+## Running in production
+Firstly, you need to build the frontend. Clone this repository and navigate to the frontend subdirectory. Fill the `.env` file, like in this example:
+```sh
+VITE_API_URL="https://your-domain.com/api"
+VITE_API_DOMAIN="https://your-domain.com"
+```
+Then run `npm run build`. The built files are contained in a `dist` directory. They will be needed later.
+
+On your server, create a new directory. Inside, create a docker-compose.yml file, and pase the following contents, replacing `HOSTNAME`, `RAILS_MASTER_KEY`, and `SECRET_KEY_BASE` with the apropriate values.
+```yml
+version: '3.3'
+
+services:
+  backend:
+    image: ghcr.io/compass-studios/rtv-usa-agd-backend:latest
+    restart: always
+    environment:
+      DATABASE_HOST: db
+      DATABASE_NAME: rtv-usa-agd
+      DATABASE_USER: rtv-usa-agd
+      DATABASE_PASSWORD: 'password'
+      RAILS_ENV: production
+      RAILS_RELATIVE_URL_ROOT: '/api'
+      RAILS_LOG_TO_STDOUT: true
+      HOSTNAME: 'your-domain.com'
+      RAILS_SERVE_STATIC_FILES: true
+      # Generate a secret with `rails secret | cut -c-32` inside the container
+      RAILS_MASTER_KEY: paste-the-master-key
+      # Same here, but with only `rails secret`
+      SECRET_KEY_BASE: paste-the-secret-key
+    ports:
+      - '127.0.0.1:3000:3000'
+    volumes:
+      - ./data/storage:/app/storage
+    depends_on:
+      - db
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: rtv-usa-agd
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: rtv-usa-agd
+    volumes:
+        - ./data/db:/var/lib/postgresql/data
+```
+
+Then start the backend and database containers with `docker compose up -d`
+
+Next up, copy the previously built frontend files to a folder that could be served by nginx. I prefer it being in the same directory as my docker compose file.
+
+Now it's time to configure Nginx to serve our frontend, and proxy our backend. Assuming you already have Nginx working, create a file (lets say, `rtv-usa-agd`) in `/etc/nginx/sites-available`, and paste the following contents, replacing `/path/to/your/frontend` with, well, a path to your built frontend:
+```nginx
+server {
+    server_name your-domain.com;
+
+    location /api {
+        proxy_pass http://127.0.0.1:3000/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /admin/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        root      /path/to/your/frontend;
+        index     index.html;
+        try_files $uri /index.html;
+    }
+
+    listen 80 http2;
+    listen [::]:80 http2;
+
+    client_max_body_size 1024M;
+}
+```
+
+Now link the file to the sites-enabled folder
+```sh
+sudo ln -s /etc/nginx/sites-available/rtv-usa-agd /etc/nginx/sites-enabled/rtv-usa-agd
+```
+And reload Nginx
+```sh
+sudo systemctl reload nginx
+```
+
+And that's it! Now you should be able to access the RTV USA AGD website on your domain, and the admin panel on `/admin`.
